@@ -19,7 +19,7 @@
 
 -export([start_link/0]).
 
--export([setup/0, metrics/0, stats/0, vm/0, ets/0, process_metrics/0, filtered_metrics/0, filtered_stats/0, filtered_vm/0, filtered_ets/0, filtered_process_metrics/0]).
+-export([metrics/0, stats/0, vm/0, ets/0, process_metrics/0, filtered_metrics/0, filtered_stats/0, filtered_vm/0, filtered_ets/0, filtered_process_metrics/0]).
 
 -define(DEFAULT_PORT, 8082).
 
@@ -35,28 +35,6 @@
 -record(state, {}).
 
 %% Not part of gen server
-
-setup() ->
-  folsom_metrics:new_counter(udp_request_counter),
-  folsom_metrics:new_counter(tcp_request_counter),
-  folsom_metrics:new_meter(udp_request_meter),
-  folsom_metrics:new_meter(tcp_request_meter),
-
-  folsom_metrics:new_histogram(udp_handoff_histogram),
-  folsom_metrics:new_histogram(tcp_handoff_histogram),
-
-  folsom_metrics:new_counter(request_throttled_counter),
-  folsom_metrics:new_meter(request_throttled_meter),
-  folsom_metrics:new_histogram(request_handled_histogram),
-
-  folsom_metrics:new_counter(packet_dropped_empty_queue_counter),
-  folsom_metrics:new_meter(packet_dropped_empty_queue_meter),
-
-  folsom_metrics:new_meter(cache_hit_meter),
-  folsom_metrics:new_meter(cache_expired_meter),
-  folsom_metrics:new_meter(cache_miss_meter),
-
-  folsom_metrics:get_metrics().
 
 metrics() ->
   lists:map(
@@ -175,7 +153,6 @@ filtered_process_metrics() ->
 
 %% Gen server
 start_link() ->
-  setup(),
   gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 init([]) ->
