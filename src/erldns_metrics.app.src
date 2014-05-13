@@ -1,0 +1,8 @@
+{application, erldns_metrics,
+ [{description, "Erlang Authoritative DNS Server Metrics API"},
+  {vsn, "1.0.0"},
+  {mod, { erldns_metrics_app, []}},
+  {applications, [kernel, stdlib, inets, crypto, ssl, observer, bear, folsom, ranch, cowboy, erldns]} 
+  ]}.
+
+
