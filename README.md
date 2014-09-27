@@ -9,3 +9,17 @@ curl -s http://localhost:8082/ -H "Accept: application/json" | python -mjson.too
 ```
 
 Note that timing stats are givin in microseconds.
+
+### Configuration
+
+To configure the metrics API port, add something like the following to your erlang configuration section:
+
+```erlang
+[ 
+  {erldns,[
+      {metrics, [
+        {port, 8082}
+      ]},
+    ]}
+]
+```
