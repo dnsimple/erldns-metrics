@@ -1,8 +1,22 @@
+% -*- mode: Erlang; -*-
 {application, erldns_metrics,
  [{description, "Erlang Authoritative DNS Server Metrics API"},
   {vsn, "1.0.0"},
+  {licenses, ["MIT"]},
   {mod, { erldns_metrics_app, []}},
-  {applications, [kernel, stdlib, inets, crypto, ssl, observer, bear, folsom, cowlib, ranch, cowboy, erldns]}
+  {applications, [kernel,
+                  stdlib,
+                  inets,
+                  crypto,
+                  lager,
+                  ssl,
+                  observer,
+                  bear,
+                  folsom,
+                  cowlib,
+                  ranch,
+                  cowboy,
+                  erldns]}
   ]}.
 
 
