@@ -1,4 +1,4 @@
-## Metrics API for erldns
+## Metrics API for [erldns](https://github.com/dnsimple/erldns)
 
 This app provides an HTTP API for gathering and querying metrics from an erldns server and presenting those metrics as JSON.
 
