@@ -4,7 +4,7 @@ This app provides an HTTP API for gathering and querying metrics from an erldns 
 
 Here's an example script that shows how to get the output with curl and pass through Python to format it in a pretty fashion.
 
-```sh
+```bash
 curl -s http://localhost:8082/ -H "Accept: application/json" | python -mjson.tool
 ```
 
@@ -24,8 +24,25 @@ To configure the metrics API port, add something like the following to your erla
 ]
 ```
 
-## Running the tool
+## Building
 
-```sh
-overmind start
+To build:
+
+```bash
+make
+```
+
+To start fresh:
+
+```bash
+make fresh
+make
+```
+
+## Running
+
+### To get an interactive Erlang REPL:
+
+```bash
+./rebar3 shell
 ```
