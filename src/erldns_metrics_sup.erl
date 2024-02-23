@@ -31,14 +31,12 @@
 %% Public API
 -spec start_link() -> any().
 start_link() ->
-  supervisor:start_link({local, ?SUPERVISOR}, ?MODULE, []).
-
+    supervisor:start_link({local, ?SUPERVISOR}, ?MODULE, []).
 
 %% Callbacks
 init(_Args) ->
-  SysProcs = [
-    ?CHILD(erldns_metrics, worker, [])
-  ],
+    SysProcs = [
+        ?CHILD(erldns_metrics, worker, [])
+    ],
 
-  {ok, {{one_for_one, 20, 10}, SysProcs}}.
-
+    {ok, {{one_for_one, 20, 10}, SysProcs}}.
