@@ -20,10 +20,9 @@
 -export([start/2, stop/1]).
 
 start(_Type, _Args) ->
-  lager:debug("Starting erldns_metrics application"),
-  erldns_metrics_sup:start_link().
+    lager:debug("Starting erldns_metrics application"),
+    erldns_metrics_sup:start_link().
 
 stop(_State) ->
-  lager:info("Stop erldns_metrics application"),
-  ok.
-
+    lager:info("Stop erldns_metrics application"),
+    ok.

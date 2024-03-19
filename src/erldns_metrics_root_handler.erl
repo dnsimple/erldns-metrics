@@ -22,30 +22,33 @@
 -behaviour(cowboy_rest).
 
 init(Req, State) ->
-  {cowboy_rest, Req, State}.
+    {cowboy_rest, Req, State}.
 
 content_types_provided(Req, State) ->
-  {[
-      {<<"text/html">>, to_html},
-      {<<"text/plain">>, to_text},
-      {<<"application/json">>, to_json}
-    ], Req, State}.
+    {
+        [
+            {<<"text/html">>, to_html},
+            {<<"text/plain">>, to_text},
+            {<<"application/json">>, to_json}
+        ],
+        Req,
+        State
+    }.
 
 to_html(Req, State) ->
-  {<<"erldns metrics">>, Req, State}.
+    {<<"erldns metrics">>, Req, State}.
 
 to_text(Req, State) ->
-  {<<"erldns metrics">>, Req, State}.
+    {<<"erldns metrics">>, Req, State}.
 
 to_json(Req, State) ->
-  Body = jsx:encode([{<<"erldns">>, 
-        [
-          {<<"metrics">>, erldns_metrics:filtered_metrics()},
-          {<<"stats">>, erldns_metrics:filtered_stats()},
-          {<<"vm">>, erldns_metrics:filtered_vm()},
-          {<<"ets">>, erldns_metrics:filtered_ets()},
-          {<<"processes">>, erldns_metrics:filtered_process_metrics()}
-        ]
-      }]),
-  {Body, Req, State}.
-
+    Body = jsx:encode([
+        {<<"erldns">>, [
+            {<<"metrics">>, erldns_metrics:filtered_metrics()},
+            {<<"stats">>, erldns_metrics:filtered_stats()},
+            {<<"vm">>, erldns_metrics:filtered_vm()},
+            {<<"ets">>, erldns_metrics:filtered_ets()},
+            {<<"processes">>, erldns_metrics:filtered_process_metrics()}
+        ]}
+    ]),
+    {Body, Req, State}.
