@@ -17,7 +17,7 @@
 
 -behavior(gen_server).
 
--export([start_link/0]).
+-export([start_link/0]). 
 
 -export([
     metrics/0,
@@ -29,7 +29,8 @@
     filtered_stats/0,
     filtered_vm/0,
     filtered_ets/0,
-    filtered_process_metrics/0
+    filtered_process_metrics/0,
+    filtered_process_erldns_workers_metrics/0 
 ]).
 
 -define(DEFAULT_PORT, 8082).
@@ -153,6 +154,27 @@ keys_to_strings(Pairs) ->
         Pairs
     ).
 
+gproc_erldns_workers_processes() ->
+  Key = {erldns_worker, '_', '_', '_'},
+	GProcKey = {'_', '_', Key},
+	MatchHead = {GProcKey, '_', '_'},
+	Guard = [],
+	Result = ['$$'],
+	gproc:select([{MatchHead, Guard, Result}]).
+
+get_pids_from_keys(Keys) ->
+    lists:map(fun extract_pid/1, Keys).
+
+extract_pid([{p, _Scope, Key}, Pid, _Tag]) when is_pid(Pid) ->
+    {Prefix, Proto, WorkerId, _} = Key,
+    [list_to_binary(io_lib:format("~p_~p_~p_~p", [Prefix, Proto, WorkerId, Pid])), Pid];
+extract_pid([{n, _Scope, Name}, Pid, _Tag]) when is_pid(Pid) ->
+    % {erldns_worker,udp,19,<0.1468.0>}
+    {Prefix, Proto, WorkerId, _} = Name,
+    [list_to_binary(io_lib:format("~p_~p_~p_~p", [Prefix, Proto, WorkerId, Pid])), Pid];
+extract_pid(_) ->
+    [].
+
 process_metrics() ->
     lists:map(
         fun(ProcessName) ->
@@ -170,8 +192,28 @@ process_metrics() ->
         registered()
     ).
 
+process_erldns_workers_metrics() ->
+    Keys = gproc_erldns_workers_processes(),
+    lists:map(
+        fun([ProcessName, Pid]) ->
+            {
+                ProcessName,
+                [
+                    process_info(Pid, memory),
+                    process_info(Pid, heap_size),
+                    process_info(Pid, stack_size),
+                    process_info(Pid, message_queue_len)
+                ]
+            }
+        end,
+        get_pids_from_keys(Keys)
+    ).
+
 filtered_process_metrics() ->
     process_metrics().
+
+filtered_process_erldns_workers_metrics () ->
+    process_erldns_workers_metrics().
 
 %% Gen server
 start_link() ->
