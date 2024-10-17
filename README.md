@@ -77,3 +77,11 @@ rebar3 shell --config erldns_metrics.config
 ```bash
 make test
 ```
+
+## Formatting
+
+If your editor doesn't automatically format Erlang code using [erlfmt](https://github.com/WhatsApp/erlfmt), run:
+
+```bash
+make format
+```
