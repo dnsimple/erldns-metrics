@@ -1,6 +1,10 @@
-# Metrics API for [erldns](https://github.com/dnsimple/erldns)
+# Metrics API for [erldns]
 
-This app provides an HTTP API for gathering and querying metrics from an erldns server and presenting those metrics as JSON.
+This app provides an HTTP API for gathering and querying metrics from an [erldns] server and presenting those metrics as JSON.
+
+> [!NOTE]
+> erldns_metrics is architected to run in the *same Erlang VM* as erldns, as it reads metrics from the runtime. This is why erldns is a dependency of this library, and gets started in [`erldns_metrics.app.src`](./src/erldns_metrics.app.src): it's useful for local development, so that starting erldns_metrics also starts erldns.
+> In general, you might want to run erldns_metrics and erldns both as dependencies of an application that *you* control and deploy.
 
 Here's an example script that shows how to get the output with `curl` and pass it through Python to format it in a pretty fashion. It assumes you have this API running on port `8082`.
 
@@ -13,16 +17,16 @@ curl -s http://localhost:8082/ -H "Accept: application/json" | python -mjson.too
 
 ## Configuration
 
-To configure the metrics API port, add something like the following to your Erlang configuration section:
+To run this application and configure erldns, add something like the following to your Erlang configuration section:
 
 ```erlang
 [
-  {erldns,[
+  {erldns, [
       {metrics, [
         {port, 8082}
       ]},
     ]}
-]
+].
 ```
 
 ## Building
@@ -41,7 +45,7 @@ make fresh
 
 ## Running
 
-You'll need [erldns]() running. Then, you can run erldns_metrics as:
+You'll need [erldns] running. erldns_metrics starts it on startup, so you just need to run this in the erldns_metrics repository:
 
 ```bash
 rebar3 shell
@@ -85,3 +89,5 @@ If your editor doesn't automatically format Erlang code using [erlfmt](https://g
 ```bash
 make format
 ```
+
+[erldns]: https://github.com/dnsimple/erldns
