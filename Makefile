@@ -24,4 +24,9 @@ fresh: wipe build
 
 .PHONY: test
 test: $(REBAR)
+	$(REBAR) fmt --check
 	$(REBAR) dialyzer
+
+.PHONY: format
+format: $(REBAR)
+	$(REBAR) fmt
