@@ -17,15 +17,18 @@ curl -s http://localhost:8082/ -H "Accept: application/json" | python -mjson.too
 
 ## Configuration
 
-To run this application and configure erldns, add something like the following to your Erlang configuration section:
+Configure this application with the `metrics` key under the `erldns` application:
 
 ```erlang
 [
   {erldns, [
       {metrics, [
-        {port, 8082}
-      ]},
-    ]}
+        %% Port that the JSON HTTP API runs on.
+        {port, 8082},
+        %% Processes to collect metrics about (see erlang:process_info/1).
+        {monitored_processes, [erldns_zone_cache, erldns_query_throttle]}
+      ]}
+  ]}
 ].
 ```
 

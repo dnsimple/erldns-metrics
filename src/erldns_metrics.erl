@@ -24,7 +24,6 @@
     stats/0,
     vm/0,
     ets/0,
-    process_metrics/0,
     filtered_metrics/0,
     filtered_stats/0,
     filtered_vm/0,
@@ -153,25 +152,27 @@ keys_to_strings(Pairs) ->
         Pairs
     ).
 
-process_metrics() ->
-    lists:map(
+filtered_process_metrics() ->
+    MonitoredProcessNames = proplists:get_value(monitored_processes, metrics_env(), []),
+
+    lists:filtermap(
         fun(ProcessName) ->
-            Pid = whereis(ProcessName),
-            {
-                ProcessName,
-                [
-                    process_info(Pid, memory),
-                    process_info(Pid, heap_size),
-                    process_info(Pid, stack_size),
-                    process_info(Pid, message_queue_len)
-                ]
-            }
+            case lists:member(ProcessName, MonitoredProcessNames) of
+                true -> {true, process_metrics(ProcessName)};
+                false -> false
+            end
         end,
         registered()
     ).
 
-filtered_process_metrics() ->
-    process_metrics().
+process_metrics(ProcessName) ->
+    Pid = whereis(ProcessName),
+    [
+        process_info(Pid, memory),
+        process_info(Pid, heap_size),
+        process_info(Pid, stack_size),
+        process_info(Pid, message_queue_len)
+    ].
 
 %% Gen server
 start_link() ->
