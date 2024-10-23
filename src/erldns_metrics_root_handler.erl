@@ -42,7 +42,7 @@ to_text(Req, State) ->
     {<<"erldns metrics">>, Req, State}.
 
 to_json(Req, State) ->
-    Body = jsx:encode([
+    Metrics = [
         {<<"erldns">>, [
             {<<"metrics">>, erldns_metrics:filtered_metrics()},
             {<<"stats">>, erldns_metrics:filtered_stats()},
@@ -50,5 +50,10 @@ to_json(Req, State) ->
             {<<"ets">>, erldns_metrics:filtered_ets()},
             {<<"processes">>, erldns_metrics:filtered_process_metrics()}
         ]}
-    ]),
+    ],
+
+    Body = iolist_to_binary(json:encode(Metrics, fun encode_to_json/2)),
     {Body, Req, State}.
+
+encode_to_json([{_, _} | _] = Value, Encode) -> json:encode_key_value_list(Value, Encode);
+encode_to_json(Value, Encode) -> json:encode_value(Value, Encode).
