@@ -2,6 +2,9 @@
 
 This app provides an HTTP API for gathering and querying metrics from an [erldns] server and presenting those metrics as JSON.
 
+[![Build Status](https://github.com/dnsimple/erldns-metrics/actions/workflows/ci.yml/badge.svg)](https://github.com/dnsimple/erldns-metrics/actions/workflows/ci.yml)
+[![Module Version](https://img.shields.io/hexpm/v/erldns-metrics.svg)](https://hex.pm/packages/erldns-metrics)
+
 > [!NOTE]
 > erldns_metrics is architected to run in the *same Erlang VM* as erldns, as it reads metrics from the runtime. This is why erldns is a dependency of this library, and gets started in [`erldns_metrics.app.src`](./src/erldns_metrics.app.src): it's useful for local development, so that starting erldns_metrics also starts erldns.
 > In general, you might want to run erldns_metrics and erldns both as dependencies of an application that *you* control and deploy.
