@@ -1,4 +1,9 @@
-# Metrics API for [erldns]
+# Archived
+
+> [!CAUTION]
+> This repo has been archived and its contents have been merged into [`erldns`](https://github.com/dnsimple/erldns).
+
+## Metrics API for [erldns]
 
 This app provides an HTTP API for gathering and querying metrics from an [erldns] server and presenting those metrics as JSON.
 
